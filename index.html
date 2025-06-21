@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Interactive Quiz Application</title>
+</head>
+<body>
+  <script>
+    const questions = [
+      {
+        question: "What is the capital of France?",
+        options: ["Berlin", "Madrid", "Paris", "Rome"],
+        correct: 2
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Mars", "Jupiter", "Venus"],
+        correct: 1
+      },
+      {
+        question: "What is 2 + 2?",
+        options: ["3", "4", "5", "22"],
+        correct: 1
+      }
+    ];
+
+    let currentQuestion = 0;
+
+    function createQuizApp() {
+      const container = document.createElement('div');
+      container.style.maxWidth = '400px';
+      container.style.margin = '50px auto';
+      container.style.fontFamily = 'Arial, sans-serif';
+      container.style.border = '1px solid #ccc';
+      container.style.borderRadius = '8px';
+      container.style.padding = '20px';
+      container.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+      document.body.appendChild(container);
+
+      const questionEl = document.createElement('h3');
+      container.appendChild(questionEl);
+
+      const optionsEl = document.createElement('div');
+      container.appendChild(optionsEl);
+
+      const nextBtn = document.createElement('button');
+      nextBtn.innerText = 'Next';
+      nextBtn.style.marginTop = '20px';
+      nextBtn.style.display = 'none';
+      container.appendChild(nextBtn);
+
+      function showQuestion() {
+        questionEl.innerText = questions[currentQuestion].question;
+        optionsEl.innerHTML = '';
+        nextBtn.style.display = 'none';
+
+        questions[currentQuestion].options.forEach((opt, i) => {
+          const btn = document.createElement('button');
+          btn.innerText = opt;
+          btn.style.display = 'block';
+          btn.style.margin = '10px 0';
+          btn.style.padding = '10px';
+          btn.style.width = '100%';
+          btn.onclick = () => checkAnswer(i, btn);
+          optionsEl.appendChild(btn);
+        });
+      }
+
+      function checkAnswer(selectedIndex, button) {
+        const isCorrect = selectedIndex === questions[currentQuestion].correct;
+        button.style.backgroundColor = isCorrect ? 'green' : 'red';
+        button.style.color = 'white';
+        Array.from(optionsEl.children).forEach(btn => btn.disabled = true);
+        nextBtn.style.display = 'block';
+      }
+
+      nextBtn.onclick = () => {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          container.innerHTML = `<h2>Quiz Completed!</h2><p>Thank you for participating.</p>`;
+        }
+      };
+
+      showQuestion();
+    }
+
+    createQuizApp();
+  </script>
+</body>
+</html>
